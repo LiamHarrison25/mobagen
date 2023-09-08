@@ -8,5 +8,21 @@ Vector2f AlignmentRule::computeForce(const std::vector<Boid*>& neighborhood, Boi
   // todo: add your code here to align each boid in a neighborhood
   // hint: iterate over the neighborhood
 
+  float x = 0, y = 0;
+  int i;
+  for(i = 0; i < neighborhood.size(); i++) //iterate over the neighborhood
+  {
+    //do math here to alignment
+
+    //get the average velocity of the group
+    x += neighborhood[i]->getVelocity().x;
+    y += neighborhood[i]->getVelocity().y;
+
+    //boid->getDetectionRadius()
+  }
+
+  averageVelocity = {x/neighborhood.size(), y/neighborhood.size()};
+
   return Vector2f::normalized(averageVelocity);
 }
+
