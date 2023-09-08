@@ -1,8 +1,10 @@
 #ifndef MOBAGEN_ENGINE_OBJECT_H_
 #define MOBAGEN_ENGINE_OBJECT_H_
 
+
 #include <string>
 #include <vector>
+#include <cstdint>
 
 class Object {
 public:
