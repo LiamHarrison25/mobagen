@@ -9,22 +9,28 @@ Vector2f CohesionRule::computeForce(const std::vector<Boid*>& neighborhood, Boid
 
   Vector2f centerOfMass = Vector2f(0, 0);
 
-  // find center of mass
-  int i;
-  for (i = 0; i < neighborhood.size(); i++)
+
+  if(!neighborhood.empty())
   {
-    centerOfMass += neighborhood[i]->getPosition();
+    // find center of mass
+    int i;
+    for (i = 0; i < neighborhood.size(); i++)
+    {
+      centerOfMass += neighborhood[i]->getPosition();
+    }
+
+    centerOfMass = centerOfMass / neighborhood.size();
+
+    //find cohesionForce
+
+    //DO NOT divide by re. It is already done in Mobagen.
+
+    //TODO: calculate the cohesion force
+
+    cohesionForce = boid->getPosition() - centerOfMass;
   }
 
-  centerOfMass = centerOfMass / neighborhood.size();
 
-  //find cohesionForce
-
-  //DO NOT divide by re. It is already done in Mobagen.
-
-  //TODO: calculate the cohesion force
-
-  cohesionForce = boid->getPosition() - centerOfMass;
 
 
   return cohesionForce;
