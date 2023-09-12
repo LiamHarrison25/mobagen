@@ -27,7 +27,9 @@ Vector2f CohesionRule::computeForce(const std::vector<Boid*>& neighborhood, Boid
 
     //TODO: calculate the cohesion force
 
-    cohesionForce = boid->getPosition() - centerOfMass;
+    cohesionForce = centerOfMass - boid->getPosition();
+
+    //cohesionForce = boid->getPosition() - centerOfMass;
   }
 
 
