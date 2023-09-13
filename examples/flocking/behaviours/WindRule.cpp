@@ -5,13 +5,12 @@
 #include "engine/Engine.h"
 
 Vector2f WindRule::computeForce(const std::vector<Boid*>& neighborhood, Boid* boid) {
-  // todo: add a wind force here
-  // hint: use the windAngle variable
 
   Vector2f windForce = boid->getPosition();
   windForce.y = 0;
   windForce.normalized();
 
+  //moves in the direction of the angle
   windForce *= cos(windAngle);
   windForce.y = sin(windAngle);
 
