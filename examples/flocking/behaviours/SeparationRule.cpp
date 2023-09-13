@@ -9,43 +9,37 @@ Vector2f SeparationRule::computeForce(const std::vector<Boid*>& neighborhood, Bo
 
       float desiredDistance = desiredMinimalDistance;
   //
-  //    // todo: implement a force that if neighbor(s) enter the radius, moves the boid away from it/them
+  //    //checks to make sure that there are neighbors
         if (!neighborhood.empty()) {
-            Vector2f position = boid->transform.position;
+
             int countCloseFlockmates = 0;
 
-  //        // todo: find and apply force only on the closest mates
+            Vector2f Acc = Vector2f(0, 0);
 
             //iterate through the neighborhood and only move away the neighbors that are less than the separation radius
-            Vector2f Acc = Vector2f(0, 0);
             int i;
             for (i = 0; i < neighborhood.size(); i++)
             {
-
               //gets the direction of a neighbor
-              Vector2f differenceVector = neighborhood[i]->getPosition() - boid->getPosition();
+              Vector2f differenceVector = boid->getPosition() - neighborhood[i]->getPosition();
 
               //gets the distance of the neighbor
               float distance = differenceVector.getMagnitude();
 
-              if(distance < desiredDistance && distance > 0)
+              if(distance < desiredDistance && distance > 0) //checks if the neighbor is in the radius
               {
                 countCloseFlockmates++;
-                //Hat = Diff Vector.Normalized
                 Vector2f hat = differenceVector.normalized();
-                Vector2f force = hat / distance;
-                Acc += force;
+                Vector2f force = hat / (distance / desiredDistance);
+                Acc += force; //adds to the accumulative force
               }
 
               if(countCloseFlockmates > 0)
               {
-                separatingForce = (Acc / countCloseFlockmates);
+                separatingForce = (Acc / countCloseFlockmates); //gets the separating force
               }
-
             }
-
         }
-
   separatingForce = Vector2f::normalized(separatingForce);
 
   return separatingForce;

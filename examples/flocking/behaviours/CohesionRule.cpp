@@ -4,36 +4,30 @@
 Vector2f CohesionRule::computeForce(const std::vector<Boid*>& neighborhood, Boid* boid) {
   Vector2f cohesionForce;
 
-  // todo: add your code here to make a force towards the center of mass
-  // hint: iterate over the neighborhood
-
   Vector2f centerOfMass = Vector2f(0, 0);
 
-
+  //checks to make sure that there are neighbors
   if(!neighborhood.empty())
   {
-    // find center of mass
+    //Iterates through the neighborhood
     int i;
     for (i = 0; i < neighborhood.size(); i++)
     {
-      centerOfMass += neighborhood[i]->getPosition();
+      // find center of mass
+      centerOfMass += neighborhood[i]->getPosition(); //gets the center of mass of the neighbors
     }
 
     centerOfMass = centerOfMass / neighborhood.size();
 
-    //find cohesionForce
-
     //DO NOT divide by re. It is already done in Mobagen.
 
-    //TODO: calculate the cohesion force
+    //find cohesionForce
 
     cohesionForce = centerOfMass - boid->getPosition();
 
-    //cohesionForce = boid->getPosition() - centerOfMass;
+    cohesionForce = cohesionForce.normalized();
+
   }
-
-
-
 
   return cohesionForce;
 }
