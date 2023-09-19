@@ -40,20 +40,14 @@ void JohnConway::Step(World& world) {
   }
 }
 
-int JohnConway::CountNeighbors(World& world, Point2D point) {
-int neighborCount = 0;
-
-  int i, j;
-  for (i = -1; i < 4; i++)
-  {
-    for(j = -1; j < 4; j++)
-    {
-      Point2D temp = Point2D(point.x + i, point.y + j);
-      if(j != 0 && i != 0 && world.Get(temp))
-      {
-        neighborCount++;
-      }
-    }
-  }
-  return neighborCount;
+int JohnConway::CountNeighbors(World& w, Point2D p) {
+  return
+      w.Get(p.Up().Left())+
+      w.Get(p.Up()) +
+      w.Get(p.Up().Right()) +
+      w.Get(p.Left()) +
+      w.Get(p.Right()) +
+      w.Get(p.Down().Left()) +
+      w.Get(p.Down()) +
+      w.Get(p.Down().Right());
 }
