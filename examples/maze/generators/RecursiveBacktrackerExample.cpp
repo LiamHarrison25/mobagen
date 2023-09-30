@@ -2,7 +2,56 @@
 #include "Random.h"
 #include "RecursiveBacktrackerExample.h"
 #include <climits>
+
+
+Color32 color1;
+
 bool RecursiveBacktrackerExample::Step(World* w) {
+
+  //dfs steps:
+  //detect which tiles are visitable
+  //if none are visitable, pull from the stack and go to that
+  //else:
+  //Go to a random visitable tile
+  //add that tile to the stack
+
+  Point2D nextPoint;
+
+  Point2D p;
+
+  std::vector visitables = getVisitables(w, p); //gets a vector that stores all the visitable points
+
+  if(visitables.empty() && !stack.empty())
+  {
+    //take a point from the stack and move there
+
+    nextPoint = stack.front();
+    stack.erase(stack.begin());
+
+    //TODO: Move to the next point
+    //visited.insert(p)
+    color1.Dark();
+    w->SetNodeColor(p, color1); //sets the new color
+  }
+  else if(stack.empty() && visitables.empty())
+  {
+    return true;
+  }
+  else
+  {
+    int upperRange = visitables.size();
+
+    //go to a random visitable tile
+    int random = 0;
+
+    //TODO: set random to a random number between 0 and upperRange
+
+    nextPoint = visitables[random];
+
+    //add that tile into the stack
+    //stack.insert(stack.front(), nextPoint)
+  }
+
 
 }
 
