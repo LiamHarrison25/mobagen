@@ -25,7 +25,7 @@ Point2D Cat::Move(World* world) {
   }
 
   std::queue<Point2D> frontier; //queue used to store the next points to visit
-  std::vector<Point2D> reached; //vector used to store the points that have been reached already
+  std::vector<Point2D> reached; //vector used to store the points that have been reached already //TODO: Maybe change to a map. This may make it faster and will avoid using the for loop every time for checking
   std::map<int, Point2D> cameFrom; //map used to store the location from where a point came. The key is an int which is a 1d representation of a point2D.
 
   //Gets the initial neighbors
@@ -34,36 +34,42 @@ Point2D Cat::Move(World* world) {
   {
     frontier.push(world->E(catPos));
     cameFrom.emplace(worldSize * world->E(catPos).x + world->E(catPos).y, catPos);
+    reached.push_back(world->E(catPos));
   }
 
   if(world->catCanMoveToPosition(world->SE(catPos)))
   {
     frontier.push(world->SE(catPos));
     cameFrom.emplace(worldSize * world->SE(catPos).x + world->SE(catPos).y, catPos);
+    reached.push_back(world->SE(catPos));
   }
 
   if(world->catCanMoveToPosition(world->SW(catPos)))
   {
     frontier.push(world->SW(catPos));
     cameFrom.emplace(worldSize * world->SW(catPos).x + world->SW(catPos).y, catPos);
+    reached.push_back(world->SW(catPos));
   }
 
   if(world->catCanMoveToPosition(world->W(catPos)))
   {
     frontier.push(world->W(catPos));
     cameFrom.emplace(worldSize * world->W(catPos).x + world->W(catPos).y, catPos);
+    reached.push_back(world->W(catPos));
   }
 
   if(world->catCanMoveToPosition(world->NW(catPos)))
   {
     frontier.push(world->NW(catPos));
     cameFrom.emplace(worldSize * world->NW(catPos).x + world->NW(catPos).y, catPos);
+    reached.push_back(world->NW(catPos));
   }
 
   if(world->catCanMoveToPosition(world->NE(catPos)))
   {
     frontier.push(world->NE(catPos));
     cameFrom.emplace(worldSize * world->NE(catPos).x + world->NE(catPos).y, catPos);
+    reached.push_back(world->NE(catPos));
   }
 
   //Loop until there are not more points to check
