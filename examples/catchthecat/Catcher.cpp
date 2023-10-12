@@ -26,8 +26,7 @@ Point2D Catcher::Move(World* world) {
     //check if the point is -side / 2 or side /2
     //if it is, it is going to be an end point
 
-
-    if(worldSize * currentPos.y + currentPos.x == worldSize / 2 || worldSize * currentPos.y + currentPos.x == -worldSize / 2 && world->isValidPosition(currentPos)) //if it finds the exit point, exit early
+    if(worldSize * currentPos.y + currentPos.x == worldSize / 2 || worldSize * currentPos.y + currentPos.x == -worldSize / 2 && world->isValidPosition(currentPos) && world->getContent(currentPos) == 0) //if it finds the exit point, exit early
     {
       //found an end point
       exitPoint = currentPos;
@@ -102,17 +101,29 @@ Point2D Catcher::Move(World* world) {
   {
     //TODO: Add a condition for if there are no exits. If there are paths to exit, move randomly
 
-    auto side = world->getWorldSideSize() / 2;
-    Point2D p;
-
-    while(!world->isValidPosition(p))
-    {
-          p = {Random::Range(-side, side), Random::Range(-side, side)};
-          if(world->isValidPosition(p))
-          {
-            auto cat = world->getCat();
-            if (cat.x != p.x && cat.y != p.y && !world->getContent(p)) return p;
-          }
+    auto rand = Random::Range(0, 5);
+    auto pos = world->getCat();
+    switch (rand) {
+          case 0:
+            if(!world->getContent(World::NE(pos)) && world->isValidPosition(World::NE(pos)))
+            return World::NE(pos);
+          case 1:
+            if(!world->getContent(World::NW(pos)) && world->isValidPosition(World::NW(pos)))
+            return World::NW(pos);
+          case 2:
+            if(!world->getContent(World::E(pos)) && world->isValidPosition(World::E(pos)))
+            return World::E(pos);
+          case 3:
+            if(!world->getContent(World::W(pos)) && world->isValidPosition(World::W(pos)))
+            return World::W(pos);
+          case 4:
+            if(!world->getContent(World::SW(pos)) && world->isValidPosition(World::SW(pos)))
+            return World::SW(pos);
+          case 5:
+            if(!world->getContent(World::SE(pos)) && world->isValidPosition(World::SE(pos)))
+            return World::SE(pos);
+          default:
+            throw "random out of range";
     }
   }
 
@@ -126,13 +137,11 @@ Point2D Catcher::Move(World* world) {
     path.push_back(currentPos);
   }
 
-  //Used for testing //TODO: Remove this after the program stops crashing
-  if(!world->isValidPosition(path.front()))
-  {
-    return Point2D(0, 0);
-  }
+  //clears everything
+  reached.clear();
+  cameFrom.clear();
 
-  return path.front();
+  return path[1];
 
 }
 

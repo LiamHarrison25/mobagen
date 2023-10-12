@@ -27,7 +27,7 @@ Point2D Cat::Move(World* world) {
     //check if the point is -side / 2 or side /2
     //if it is, it is going to be an end point
 
-    if(worldSize * currentPos.y + currentPos.x == worldSize / 2 || worldSize * currentPos.y + currentPos.x == -worldSize / 2) //if it finds the exit point, exit early
+    if(worldSize * currentPos.y + currentPos.x == worldSize / 2 || worldSize * currentPos.y + currentPos.x == -worldSize / 2 && world->isValidPosition(currentPos) && world->getContent(currentPos) == 0) //if it finds the exit point, exit early
     {
       //found an end point
       exitPoint = currentPos;
@@ -35,6 +35,11 @@ Point2D Cat::Move(World* world) {
     }
 
     //These check whether the point can be moved to and if they have already been reached.
+
+    //TODO: Change how I am getting neighbors
+    //std::vector<Point2D> neighbors;
+
+
 
     if(world->getContent(world->E(currentPos)) == 0 && pointNotVisited(reached,world->E(currentPos)))
     {
@@ -86,19 +91,26 @@ Point2D Cat::Move(World* world) {
     auto pos = world->getCat();
     switch (rand) {
       case 0:
-        return World::NE(pos);
+        if(!world->getContent(World::NE(pos)) && world->isValidPosition(World::NE(pos)))
+          return World::NE(pos);
       case 1:
-        return World::NW(pos);
+        if(!world->getContent(World::NW(pos)) && world->isValidPosition(World::NW(pos)))
+          return World::NW(pos);
       case 2:
-        return World::E(pos);
+        if(!world->getContent(World::E(pos)) && world->isValidPosition(World::E(pos)))
+          return World::E(pos);
       case 3:
-        return World::W(pos);
+        if(!world->getContent(World::W(pos)) && world->isValidPosition(World::W(pos)))
+          return World::W(pos);
       case 4:
-        return World::SW(pos);
+        if(!world->getContent(World::SW(pos)) && world->isValidPosition(World::SW(pos)))
+          return World::SW(pos);
       case 5:
-        return World::SE(pos);
+        if(!world->getContent(World::SE(pos)) && world->isValidPosition(World::SE(pos)))
+          return World::SE(pos);
       default:
         throw "random out of range";
+    }
 
   }
 
@@ -111,6 +123,10 @@ Point2D Cat::Move(World* world) {
     currentPos = cameFrom[worldSize * currentPos.x + currentPos.y]; //gets the pos where it came from
     path.push_back(currentPos);
   }
+
+  //clears everything
+  reached.clear();
+  cameFrom.clear();
 
   return path[path.size() - 2];
 
