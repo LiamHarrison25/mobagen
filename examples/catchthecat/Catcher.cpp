@@ -26,7 +26,8 @@ Point2D Catcher::Move(World* world) {
     //check if the point is -side / 2 or side /2
     //if it is, it is going to be an end point
 
-    if(worldSize * currentPos.y + currentPos.x == worldSize / 2 || worldSize * currentPos.y + currentPos.x == -worldSize / 2) //if it finds the exit point, exit early
+
+    if(worldSize * currentPos.y + currentPos.x == worldSize / 2 || worldSize * currentPos.y + currentPos.x == -worldSize / 2 && world->isValidPosition(currentPos)) //if it finds the exit point, exit early
     {
       //found an end point
       exitPoint = currentPos;
@@ -37,44 +38,62 @@ Point2D Catcher::Move(World* world) {
 
     if(world->getContent(world->E(currentPos)) == 0 && pointNotVisited(reached,world->E(currentPos)))
     {
-      frontier.push(world->E(currentPos)); //adds it to the frontier
-      reached.push_back(world->E(currentPos)); //adds it to the reached
-      cameFrom.emplace(worldSize * world->E(currentPos).x + world->E(currentPos).y, currentPos); //stores where it came from.
+      if(world->isValidPosition(world->E(currentPos)))
+          {
+            frontier.push(world->E(currentPos)); //adds it to the frontier
+            reached.push_back(world->E(currentPos)); //adds it to the reached
+            cameFrom.emplace(worldSize * world->E(currentPos).x + world->E(currentPos).y, currentPos); //stores where it came from.
+          }
     }
 
     if(world->getContent(world->SE(currentPos)) == 0 && pointNotVisited(reached,world->SE(currentPos)))
     {
-      frontier.push(world->SE(currentPos));
-      reached.push_back(world->SE(currentPos));
-      cameFrom.emplace(worldSize * world->SE(currentPos).x + world->SE(currentPos).y, currentPos);
+          if(world->isValidPosition(world->SE(currentPos)))
+          {
+            frontier.push(world->SE(currentPos));
+            reached.push_back(world->SE(currentPos));
+            cameFrom.emplace(worldSize * world->SE(currentPos).x + world->SE(currentPos).y, currentPos);
+          }
     }
 
     if(world->getContent(world->SW(currentPos)) == 0 && pointNotVisited(reached,world->SW(currentPos)))
     {
-      frontier.push(world->SW(currentPos));
-      reached.push_back(world->SW(currentPos));
-      cameFrom.emplace(worldSize * world->SW(currentPos).x + world->SW(currentPos).y, currentPos);
+          if(world->isValidPosition(world->SW(currentPos)))
+          {
+            frontier.push(world->SW(currentPos));
+            reached.push_back(world->SW(currentPos));
+            cameFrom.emplace(worldSize * world->SW(currentPos).x + world->SW(currentPos).y, currentPos);
+          }
     }
 
     if(world->getContent(world->W(currentPos)) == 0 && pointNotVisited(reached,world->W(currentPos)))
     {
-      frontier.push(world->W(currentPos));
-      reached.push_back(world->W(currentPos));
-      cameFrom.emplace(worldSize * world->W(currentPos).x + world->W(currentPos).y, currentPos);
+          if(world->isValidPosition(world->W(currentPos)))
+          {
+            frontier.push(world->W(currentPos));
+            reached.push_back(world->W(currentPos));
+            cameFrom.emplace(worldSize * world->W(currentPos).x + world->W(currentPos).y, currentPos);
+          }
     }
 
     if(world->getContent(world->NW(currentPos)) == 0 && pointNotVisited(reached,world->NW(currentPos)))
     {
-      frontier.push(world->NW(currentPos));
-      reached.push_back(world->NW(currentPos));
-      cameFrom.emplace(worldSize * world->NW(currentPos).x + world->NW(currentPos).y, currentPos);
+          if(world->isValidPosition(world->NW(currentPos)))
+          {
+            frontier.push(world->NW(currentPos));
+            reached.push_back(world->NW(currentPos));
+            cameFrom.emplace(worldSize * world->NW(currentPos).x + world->NW(currentPos).y, currentPos);
+          }
     }
 
     if(world->getContent(world->NE(currentPos)) == 0 && pointNotVisited(reached,world->NE(currentPos)))
     {
-      frontier.push(world->NE(catPos));
-      reached.push_back(world->NE(currentPos));
-      cameFrom.emplace(worldSize * world->NE(currentPos).x + world->NE(currentPos).y, currentPos);
+          if(world->isValidPosition(world->NE(currentPos)))
+          {
+            frontier.push(world->NE(catPos));
+            reached.push_back(world->NE(currentPos));
+            cameFrom.emplace(worldSize * world->NE(currentPos).x + world->NE(currentPos).y, currentPos);
+          }
     }
 
   }
@@ -83,6 +102,18 @@ Point2D Catcher::Move(World* world) {
   {
     //TODO: Add a condition for if there are no exits. If there are paths to exit, move randomly
 
+    auto side = world->getWorldSideSize() / 2;
+    Point2D p;
+
+    while(!world->isValidPosition(p))
+    {
+          p = {Random::Range(-side, side), Random::Range(-side, side)};
+          if(world->isValidPosition(p))
+          {
+            auto cat = world->getCat();
+            if (cat.x != p.x && cat.y != p.y && !world->getContent(p)) return p;
+          }
+    }
   }
 
   //Gets the point to move towards
@@ -93,6 +124,12 @@ Point2D Catcher::Move(World* world) {
   {
     currentPos = cameFrom[worldSize * currentPos.x + currentPos.y]; //gets the pos where it came from
     path.push_back(currentPos);
+  }
+
+  //Used for testing //TODO: Remove this after the program stops crashing
+  if(!world->isValidPosition(path.front()))
+  {
+    return Point2D(0, 0);
   }
 
   return path.front();
@@ -112,5 +149,3 @@ bool Catcher::pointNotVisited(const std::vector<Point2D>& reached, const Point2D
 
   return true; //returns that this is a new point
 }
-
-
