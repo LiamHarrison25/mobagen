@@ -19,19 +19,31 @@ bool RecursiveBacktrackerExample::Step(World* w) {
 
   Point2D p;
 
+  if(stack.empty())
+  {
+
+  }
+
   std::vector visitables = getVisitables(w, p); //gets a vector that stores all the visitable points
+
 
   if(visitables.empty() && !stack.empty())
   {
     //take a point from the stack and move there
 
-    nextPoint = stack.front();
-    stack.erase(stack.begin());
+    //Treat the vector as a stack by using in reverse
+
+    nextPoint = stack.back();
+    //stack.erase(stack.back());
 
     //TODO: Move to the next point
     //visited.insert(p)
     color1.Dark();
-    w->SetNodeColor(p, color1); //sets the new color
+    w->SetNodeColor(p, Color::Blue); //sets the new color
+
+    //TODO: Insert the node into the visitables map
+    //visitables.insert(p, )
+
   }
   else if(stack.empty() && visitables.empty())
   {
@@ -79,6 +91,8 @@ Point2D RecursiveBacktrackerExample::randomStartPoint(World* world) {
 std::vector<Point2D> RecursiveBacktrackerExample::getVisitables(World* w, const Point2D& p) {
   auto sideOver2 = w->GetSize() / 2;
   std::vector<Point2D> visitables;
+
+  //TODO: Get the visitables
 
   return visitables;
 }
